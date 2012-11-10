@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageButton;
@@ -129,9 +130,13 @@ public class CardActivity extends Activity {
 					EndCallListener callListener = new EndCallListener();
 					TelephonyManager mTM = (TelephonyManager)CardActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
 					mTM.listen(callListener, PhoneStateListener.LISTEN_CALL_STATE);
-					String url = "tel:3334444";
-				    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));			
-				    CardActivity.this.startActivity(intent);
+					
+
+					Intent intent = getIntent();
+					String phone = intent.getStringExtra("phone");
+					
+				    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(phone));			
+				    CardActivity.this.startActivity(callIntent);
 				}
 			});	
 			
@@ -150,8 +155,8 @@ public class CardActivity extends Activity {
 			e.printStackTrace();
 		}
 		
-        ImageButton sharingButton = (ImageButton) findViewById(R.id.sharingButton);
-        sharingButton.setImageResource(R.drawable.sharing);
+        ImageView sharingButton = (ImageView) findViewById(R.id.sharingButton);
+
         
         sharingButton.setOnClickListener(new View.OnClickListener() {
           public void onClick(View v) {
