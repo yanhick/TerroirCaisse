@@ -10,17 +10,20 @@
     
      <TextView android:id="@+id/txtViewMail"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"        
+        android:layout_width="fill_parent"  
+        android:layout_below="@+id/txtViewName"      
         />
      
      <TextView android:id="@+id/txtViewCategory"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"        
+        android:layout_width="fill_parent"     
+        android:layout_below="@+id/txtViewMail"         
         />
      
       <TextView android:id="@+id/txtViewWebSite"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"        
+        android:layout_width="fill_parent" 
+        android:layout_below="@+id/txtViewCategory"         
         />
     
     <LinearLayout 
