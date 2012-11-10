@@ -2,6 +2,7 @@ package com.terroir.caisse;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -10,8 +11,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +32,7 @@ import android.widget.Toast;
 
 import com.terroir.caisse.adapter.HomeAdapter;
 import com.terroir.caisse.data.Producer;
+import com.terroir.caisse.helper.DistanceComparator;
 import com.terroir.caisse.helper.OpenDataXmlParser;
 
 public class HomeActivity extends Activity {
@@ -31,6 +41,7 @@ public class HomeActivity extends Activity {
 	protected HomeAdapter adapter;
 	protected ListView list;
 	protected Context context;
+	protected Location location;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    
@@ -47,25 +58,11 @@ public class HomeActivity extends Activity {
 			    startActivity(wake);			    			   
 			}
 		});
-        /*
-        ArrayList<Producer> producers = new ArrayList<Producer>();
-        producers.add(new Producer ("orange","fruit rond", "merde1", "merde1"));
-        producers.add(new Producer ("Lait","Il faut le mettre au frigo", "merde2", "merde2"));
-        producers.add(new Producer ("Tomate","C'est rouge", "merde3", "merde3"));
-        producers.add(new Producer ("La soupe","Cela fait grandir !", "merde4", "merde4"));
-        producers.add(new Producer ("orange","fruit rond", "merde1", "merde1"));
-        producers.add(new Producer ("Lait","Il faut le mettre au frigo", "merde2", "merde2"));
-        producers.add(new Producer ("Tomate","C'est rouge", "merde3", "merde3"));
-        producers.add(new Producer ("La soupe","Cela fait grandir !", "merde4", "merde4"));
-        producers.add(new Producer ("orange","fruit rond", "merde1", "merde1"));
-        producers.add(new Producer ("Lait","Il faut le mettre au frigo", "merde2", "merde2"));
-        producers.add(new Producer ("Tomate","C'est rouge", "merde3", "merde3"));
-        producers.add(new Producer ("La soupe","Cela fait grandir !", "merde4", "merde4"));
-        producers.add(new Producer ("orange","fruit rond", "merde1", "merde1"));
-        producers.add(new Producer ("Lait","Il faut le mettre au frigo", "merde2", "merde2"));
-        producers.add(new Producer ("Tomate","C'est rouge", "merde3", "merde3"));
-        producers.add(new Producer ("La soupe","Cela fait grandir !", "merde4", "merde4"));
-        */        
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);				
+		Criteria criteria = new Criteria();
+	    String provider = lm.getBestProvider(criteria, false);
+	    location = lm.getLastKnownLocation(provider);
+               
         Button btnMap = (Button) findViewById(R.id.btnHomeMap);
         btnMap.setOnClickListener(new OnClickListener() {			
 			@Override
@@ -79,10 +76,22 @@ public class HomeActivity extends Activity {
     }
     
     protected void load(String url) throws IOException, XmlPullParserException {
-    	OpenDataXmlParser parser = new OpenDataXmlParser();
-		InputStream stream = parser.downloadUrl(url);
-		Log.i(TAG, "parsing xml stream "+url);    		
-		List<Producer> producers = parser.parse(stream);      
+    	List<Producer> producers = null;
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    	if(prefs.contains("initiated")){
+    		//Toast.makeText(context, "Already initiated !", Toast.LENGTH_SHORT).show();
+    	}else {
+    		//Toast.makeText(context, "First launch !", Toast.LENGTH_SHORT).show();
+    		OpenDataXmlParser parser = new OpenDataXmlParser(HomeActivity.this);
+    		InputStream stream = parser.downloadUrl(url);
+    		Log.i(TAG, "parsing xml stream "+url); 
+    		producers = parser.parse(stream);
+    		//Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+    	    //editor.putBoolean("initiated", true);
+    	    //editor.commit();
+    	}
+		DistanceComparator comparator = new DistanceComparator(location); 
+		Collections.sort(producers, comparator);		
 		adapter = new HomeAdapter(context, producers);		
 		HomeActivity.this.runOnUiThread(new Runnable(){  		    
 			@Override  
@@ -93,7 +102,15 @@ public class HomeActivity extends Activity {
 		
     }
    
-    
+    protected boolean isNetworkConnected() {
+    	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);    	
+    	NetworkInfo ni = cm.getActiveNetworkInfo();    	
+    	if (ni == null) {    	
+    		// There are no active networks.    	   
+    		return false;    	  
+    	} else    	
+    		return true;    	
+    }
     
     private class ProgressTask extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog dialog;
@@ -103,8 +120,8 @@ public class HomeActivity extends Activity {
         }
 
         protected void onPreExecute() {
-        	this.dialog.setTitle("La Poste");
-        	//this.dialog.setIcon(R.drawable.icon_mini);
+        	this.dialog.setTitle("TerroirCaisse");
+        	this.dialog.setIcon(R.drawable.logo);
         	this.dialog.setMessage("Chargement en cours...");
         	//this.dialog.setProgressStyle(R.style.CustomDialogTheme);
         	this.dialog.setCancelable(false);

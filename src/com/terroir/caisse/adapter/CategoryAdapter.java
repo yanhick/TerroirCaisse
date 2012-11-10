@@ -1,35 +1,38 @@
 package com.terroir.caisse.adapter;
 
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.terroir.caisse.R;
-import com.terroir.caisse.data.Producer;
 
-public class HomeAdapter extends BaseAdapter {
+public class CategoryAdapter extends BaseAdapter {
 
 	private LayoutInflater myInflater;
-	private List<Producer> producers;
+	private List<String> categories;
+	private List<Integer> counts;
 	
-	public HomeAdapter (Context context, List<Producer> _producers) {
+	public CategoryAdapter (Context context, List<String> _categories, List<Integer> _counts) {
 		this.myInflater = LayoutInflater.from(context);
-		this.producers = _producers;
+		this.categories = _categories;
+		this.counts = _counts;
 	}
 	
 	@Override
 	public int getCount() {
-		return this.producers.size();
+		return this.categories.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		return this.producers.get(arg0);
+		return this.categories.get(arg0);
 	}
 
 	@Override
@@ -38,9 +41,9 @@ public class HomeAdapter extends BaseAdapter {
 	}
 
 	public static class ViewHolder {
-		TextView text01;
-		TextView text02;
-		TextView distance;
+		TextView category;
+		TextView count;
+		ImageView icon;
 	}
 	
 	@Override
@@ -50,19 +53,17 @@ public class HomeAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = myInflater.inflate(R.layout.home_list_item, null);
 			holder = new ViewHolder();
-			holder.text01 = (TextView) convertView.findViewById(R.id.txtNom);
-			holder.text02 = (TextView) convertView.findViewById(R.id.txtDetail);
-			holder.distance = (TextView) convertView.findViewById(R.id.txtDistance);
+			holder.category = (TextView) convertView.findViewById(R.id.txtCategory);
+			holder.count = (TextView) convertView.findViewById(R.id.txtCount);
+			holder.icon = (ImageView) convertView.findViewById(R.id.imgCategory);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.text01.setText(producers.get(position).raison_social);
-		holder.text02.setText(producers.get(position).sous_type);
-		double distance = producers.get(position).distance / 10.0;
-		distance = Math.round(distance) / 100.0;
-		holder.distance.setText(String.valueOf(distance)+"km");
+		holder.category.setText(categories.get(position));
+		holder.count.setText(counts.get(position));		
+		holder.icon.setImageResource(R.drawable.logo);
 
 		return convertView;	
 	}
