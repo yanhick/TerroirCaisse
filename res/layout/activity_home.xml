@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"    
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	<ListView android:id="@+id/lstProducers"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent">	   
+	</ListView>
+	
+	<RelativeLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@id/lstProducers" >
+
+	    <Button
+	        android:id="@+id/btnHomeMap"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:text="Show map" />
+
+	    <Button
+	        android:id="@+id/btnHomeList"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:text="Show list" />
+
+	</RelativeLayout>
+
+</RelativeLayout>

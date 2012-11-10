@@ -1,0 +1,23 @@
+package com.terroir.caisse.data;
+
+public class Producer {
+
+	public String raison_social; // raison social
+	public String sous_type; // sous type
+	public String code_postal;
+	public String ville;	
+	public String address;
+	public String telephone;
+	public String mail;
+	public String addresse_web;
+	public double latitude;
+	public double longitude;
+	
+	public Producer(String name, String type, String address, String telephone) {
+		this.raison_social = name;
+		this.sous_type = type;
+		this.address = address;
+		this.telephone = telephone;
+	}
+	
+}
