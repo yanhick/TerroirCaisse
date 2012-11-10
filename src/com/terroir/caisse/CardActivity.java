@@ -43,16 +43,7 @@ public class CardActivity extends Activity {
 	
 	private static String INSTAGRAM_ACCESS_TOKEN = "/media/recent?access_token=49812874.f59def8.7faedd01ba4845ffa9cee60a7d369f02";
 	
-    private void shareIt(){
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        String shareBody = "Here is the share content body";
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        startActivity(Intent.createChooser(sharingIntent, "Share via"));
-    }
-
-	
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,20 +53,87 @@ public class CardActivity extends Activity {
 		try {
 			Intent intent = getIntent();
 			String name = intent.getStringExtra("name");
+			
+			if (name == null)
+			{
+				name = "name";
+			}
+			
 			TextView text = (TextView) findViewById(R.id.txtViewName);
 			text.setText(name);
 			
 			String mail = intent.getStringExtra("mail");
+			
+			if (mail == null)
+			{
+				mail = "mail@mail.com";
+			}
+			
 			TextView mailText = (TextView) findViewById(R.id.txtViewMail);
 			mailText.setText(mail);
 			
 			String category = intent.getStringExtra("category");
+			
+			if (category == null)
+			{
+				category = "category";
+			}
+			
 			TextView categoryText = (TextView) findViewById(R.id.txtViewCategory);
 			categoryText.setText(category);
 
+			ImageView imgCategory = (ImageView) findViewById(R.id.imgCategory);
+			imgCategory.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent categoryIntent = new Intent(CardActivity.this, HomeActivity.class);	
+					
+					Intent intent = getIntent();
+					String category = intent.getStringExtra("category");
+					
+					categoryIntent.putExtra("sous-type", category);
+				    startActivity(categoryIntent);
+					
+				}
+			});
+			
 			String website = intent.getStringExtra("website");
+			
+			if (website == null)
+			{
+				website = "http://www.google.fr";
+			}
+			
 			TextView websiteText = (TextView) findViewById(R.id.txtViewWebSite);
 			websiteText.setText(website);
+			
+			
+			
+			String phone = intent.getStringExtra("phone");
+			
+
+			if (phone == null)
+			{
+				phone = "0606060606";
+			}
+			
+			TextView phoneText = (TextView) findViewById(R.id.txtPhone);
+			phoneText.setText(phone);
+			
+			ImageView imgView = (ImageView) findViewById(R.id.imgPhone);
+			imgView.setOnClickListener(new OnClickListener() {			
+				@Override
+				public void onClick(View v) {
+					// listen for phone state changes to restart the app when the initiated call ends
+					EndCallListener callListener = new EndCallListener();
+					TelephonyManager mTM = (TelephonyManager)CardActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
+					mTM.listen(callListener, PhoneStateListener.LISTEN_CALL_STATE);
+					String url = "tel:3334444";
+				    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));			
+				    CardActivity.this.startActivity(intent);
+				}
+			});	
 			
 			String escapedName = "";
 			if (name == null) {
@@ -91,20 +149,6 @@ public class CardActivity extends Activity {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		ImageView imgView = (ImageView) findViewById(R.id.imgPhone);
-		imgView.setOnClickListener(new OnClickListener() {			
-			@Override
-			public void onClick(View v) {
-				// listen for phone state changes to restart the app when the initiated call ends
-				EndCallListener callListener = new EndCallListener();
-				TelephonyManager mTM = (TelephonyManager)CardActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
-				mTM.listen(callListener, PhoneStateListener.LISTEN_CALL_STATE);
-				String url = "tel:3334444";
-			    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));			
-			    CardActivity.this.startActivity(intent);
-			}
-		});	
 		
         ImageButton sharingButton = (ImageButton) findViewById(R.id.sharingButton);
         sharingButton.setImageResource(R.drawable.sharing);
@@ -166,6 +210,15 @@ public class CardActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+	
+	private void shareIt(){
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Here is the share content body";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
 	
 	private class InstagramVO {
 		public String thumbnail;

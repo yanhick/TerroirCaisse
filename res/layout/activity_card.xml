@@ -1,55 +1,91 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <TextView android:id="@+id/txtViewName"
+    android:layout_height="match_parent" >
+	<LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"        
-        />
-    
-     <TextView android:id="@+id/txtViewMail"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical" >
+    <TextView
+        android:id="@+id/txtViewName"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"  
-        android:layout_below="@+id/txtViewName"      
-        />
-     
-     <TextView android:id="@+id/txtViewCategory"
+        android:text="name" />
+
+    <TextView
+        android:id="@+id/txtViewMail"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"     
-        android:layout_below="@+id/txtViewMail"         
-        />
-     
-      <TextView android:id="@+id/txtViewWebSite"
+        android:text="mail" />
+
+    <TextView
+        android:id="@+id/txtViewWebSite"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent" 
-        android:layout_below="@+id/txtViewCategory"         
-        />
-    
-    <LinearLayout 
-        android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_alignParentBottom="true"
-    	android:orientation="horizontal">
+        android:text="website" />
+	
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.55"
+                android:text="0606060606" />
+
+            <ImageView
+                android:id="@+id/imgPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_weight="0.74"
+                android:contentDescription="phone icon"
+                android:src="@drawable/phone" />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/categoryContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtViewCategory"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:text="category" />
 
         <ImageView
-            android:id="@+id/imgPhone"
+            android:id="@+id/imgCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="phone icon"
+            android:layout_alignParentRight="true"
             android:src="@drawable/phone" />
-
-        <ImageView android:id="@+id/imgTwitter"
-            android:contentDescription="twitter icon"
-            android:layout_height="wrap_content"
-        	android:layout_width="wrap_content"
-        	android:src="@drawable/twitter" />
-          <ImageButton
-    		android:id="@+id/sharingButton"
-		    android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-		    android:src="@drawable/sharing" />
         
     </LinearLayout>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/sharingButton"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:src="@drawable/sharing" />
+    </LinearLayout>
+
+
 
 </RelativeLayout>
