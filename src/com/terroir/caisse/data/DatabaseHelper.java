@@ -17,11 +17,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("create table producers (_id integer primary key autoincrement, "
-				+ "raison_social text not null, sous_type text not null, " 
-				+ "address text not null, code_postal text not null,"
-				+ "ville text not null, mail text not null,"
-				+ "telephone text not null, latitude text not null,"
-				+ "longitude text not null"
+				+ "raison_social text, sous_type text, " 
+				+ "address text, code_postal text,"
+				+ "ville text, mail text,"
+				+ "telephone text, latitude text,"
+				+ "longitude text"
 				+ ");");			
 	}
 

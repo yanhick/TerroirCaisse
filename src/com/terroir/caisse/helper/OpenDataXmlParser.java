@@ -10,10 +10,12 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.terroir.caisse.data.Producer;
-
+import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
+
+import com.terroir.caisse.data.DBAdapter;
+import com.terroir.caisse.data.Producer;
 
 /**
  * This class parses XML feeds from stackoverflow.com.
@@ -23,7 +25,15 @@ import android.util.Xml;
 public class OpenDataXmlParser {
 	public static final String TAG = OpenDataXmlParser.class.getSimpleName();
     private static final String ns = null;
+    
+    protected Context context;
+    protected DBAdapter db;
 
+    public OpenDataXmlParser(Context context) {
+    	this.context = context;
+    	db = new DBAdapter(context);         	
+    }
+    
     // Given a string representation of a URL, sets up a connection and gets an input stream.
     public InputStream downloadUrl(String urlString) throws IOException {
         URL url = new URL(urlString);
@@ -42,6 +52,7 @@ public class OpenDataXmlParser {
 
     public List<Producer> parse(InputStream in) throws XmlPullParserException, IOException {
         try {
+        	db.open();
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
@@ -49,6 +60,7 @@ public class OpenDataXmlParser {
             return readFeed(parser);
         } finally {
             in.close();
+            db.close();
         }
     }
     
@@ -66,7 +78,9 @@ public class OpenDataXmlParser {
                 //entries.add(readEntry(parser));
             } else if(name.equals("content")) {
             	Log.i(TAG, "content readed");
-            	entries.add(readContent(parser));
+            	Producer producer = readContent(parser); 
+            	db.insert(producer);
+            	entries.add(producer);
             } else {
                 skip(parser);
             }

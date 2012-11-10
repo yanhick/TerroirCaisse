@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class DBAdapter {
 
@@ -23,6 +24,10 @@ public class DBAdapter {
 	
 	public void close(){
 		db.close();
+	}
+	
+	public void drop() {
+		db.execSQL("DROP TABLE IF EXISTS producers");
 	}
 	
 	public void Truncate(){
@@ -63,4 +68,18 @@ public class DBAdapter {
 				"longitude"}, null, null, null, null, null);
 	}
 
+	public Cursor categories() {
+		return db.query("producers", new String[]{"sous_type"}, null, null, "sous_type", null, null);
+	}
+	public Cursor query(String category) {
+		return db.query("producers", new String[]{"raison_social"}, "sous_type = " + category, null, "raison_social", null, null);
+	}
+	public int count(String key, String value) {
+		String SQL_STATEMENT = "SELECT COUNT(*) FROM producers WHERE "+key+"=?";
+		Cursor cursor = db.rawQuery(SQL_STATEMENT, new String[] { value });
+		cursor.moveToFirst();
+		int count = cursor.getInt(0);
+		cursor.close();      
+		return count;
+	}
 }
