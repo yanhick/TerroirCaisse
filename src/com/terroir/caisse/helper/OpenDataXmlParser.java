@@ -68,7 +68,7 @@ public class OpenDataXmlParser {
         List<Producer> entries = new ArrayList<Producer>();
         parser.require(XmlPullParser.START_TAG, ns, "feed");
         while (parser.next() != XmlPullParser.END_TAG) {
-        	Log.i(TAG, "readFeed- parser name "+parser.getName()+" parser text: "+parser.getText());
+        	//Log.i(TAG, "readFeed- parser name "+parser.getName()+" parser text: "+parser.getText());
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
@@ -76,8 +76,7 @@ public class OpenDataXmlParser {
             // Starts by looking for the entry tag
             if (name.equals("entry")) {
                 //entries.add(readEntry(parser));
-            } else if(name.equals("content")) {
-            	Log.i(TAG, "content readed");
+            } else if(name.equals("content")) {            	
             	Producer producer = readContent(parser); 
             	db.insert(producer);
             	entries.add(producer);
@@ -109,7 +108,7 @@ public class OpenDataXmlParser {
         String type_voie = "";
         String voie = "";
         while (parser.next() != XmlPullParser.END_TAG) {        
-        	Log.i(TAG, "readContent- parser name "+parser.getName()+" parser text: "+parser.getText());
+        	//Log.i(TAG, "readContent- parser name "+parser.getName()+" parser text: "+parser.getText());
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
@@ -137,13 +136,13 @@ public class OpenDataXmlParser {
             } else if(name.equals("d:longitude")) {
             	producer.longitude = Double.parseDouble(readText(parser));            	
             } else {
-            	Log.i(TAG, "Skiping a tag"+parser.toString());
+            	//Log.i(TAG, "Skiping a tag"+parser.toString());
             	skip(parser);
             }
         }
         if(!numro.equals("") && !type_voie.equals("") && !voie.equals(""))
         	producer.address = numro + " " + type_voie + " " + voie;
-        Log.i(TAG, producer.toString());
+        //Log.i(TAG, producer.toString());
         parser.nextTag(); // jump to the child element
         parser.require(XmlPullParser.END_TAG, ns, "content");        
         parser.nextTag();
