@@ -12,6 +12,7 @@ public class Producer {
 	public String addresse_web;
 	public double latitude;
 	public double longitude;
+	public double distance;
 	
 	public Producer() {}
 	
