@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.example.gallery_test2.ImageAdapter;
 
 
 public class LoadImage extends AsyncTask<ImageLoadingData, Void, Bitmap> {

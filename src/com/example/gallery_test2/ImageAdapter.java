@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.terroir.caisse.FullImage;
+import com.terroir.caisse.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -73,7 +76,7 @@ import android.view.View.OnClickListener;
 //    	addImage(new ImageLoadingData(imageData.picture, image));
 //    	image.setImageURI(Uri.parse(imageData.picture));
     	
-    	Intent intent = new Intent(a, FullImageDisplay.class);
+    	Intent intent = new Intent(a, FullImage.class);
     	intent.putExtra(IMAGE_URL_EXTRA, imageData.picture);
     	a.startActivity(intent);
     }

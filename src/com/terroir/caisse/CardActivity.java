@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.gallery_test2.ImageAdapter;
+import com.example.gallery_test2.ImageData;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +32,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageButton;
@@ -163,12 +167,14 @@ public class CardActivity extends Activity {
             shareIt();
           }
         });
+        
+        
 
 	}
 	
 	private void onInstagramLoaded(String result) {
 		
-		ArrayList<InstagramVO> instagramData = new ArrayList<CardActivity.InstagramVO>();
+		ArrayList<ImageData> imageArray = new ArrayList<ImageData>();
 		
 		try {
 			JSONObject jsonObject = new JSONObject(result);
@@ -177,7 +183,7 @@ public class CardActivity extends Activity {
 			int length = dataArray.length();
 			for (int i = 0; i < length; i++)
 			{
-				InstagramVO instagramVO = new InstagramVO();
+				ImageData instagramVO = new ImageData();
 				
 				JSONObject data = dataArray.getJSONObject(i);
 				try{
@@ -207,13 +213,19 @@ public class CardActivity extends Activity {
 					e.printStackTrace();
 				}
 				
-				instagramData.add(instagramVO);
+				imageArray.add(instagramVO);
 			}
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		 GridView gridView = (GridView) findViewById(R.id.gridView1);
+	        
+			ImageAdapter adapter = new ImageAdapter(this, imageArray);
+			gridView.setAdapter(adapter);
+		
 	}
 	
 	private void shareIt(){
