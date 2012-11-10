@@ -34,6 +34,7 @@ public final class R {
         public static final int lstProducers=0x7f050003;
         public static final int myGmap=0x7f050006;
         public static final int txtDetail=0x7f050008;
+        public static final int txtDistance=0x7f050009;
         public static final int txtNom=0x7f050007;
         public static final int txtViewName=0x7f050000;
     }

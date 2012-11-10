@@ -40,6 +40,7 @@ public class HomeAdapter extends BaseAdapter {
 	public static class ViewHolder {
 		TextView text01;
 		TextView text02;
+		TextView distance;
 	}
 	
 	@Override
@@ -51,6 +52,7 @@ public class HomeAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			holder.text01 = (TextView) convertView.findViewById(R.id.txtNom);
 			holder.text02 = (TextView) convertView.findViewById(R.id.txtDetail);
+			holder.distance = (TextView) convertView.findViewById(R.id.txtDistance);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -58,6 +60,9 @@ public class HomeAdapter extends BaseAdapter {
 		
 		holder.text01.setText(producers.get(position).raison_social);
 		holder.text02.setText(producers.get(position).sous_type);
+		double distance = producers.get(position).distance / 10.0;
+		distance = Math.round(distance) / 100.0;
+		holder.distance.setText(String.valueOf(distance)+"km");
 
 		return convertView;	
 	}
