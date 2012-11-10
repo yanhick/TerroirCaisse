@@ -8,6 +8,21 @@
         android:layout_width="fill_parent"        
         />
     
+     <TextView android:id="@+id/txtViewMail"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"        
+        />
+     
+     <TextView android:id="@+id/txtViewCategory"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"        
+        />
+     
+      <TextView android:id="@+id/txtViewWebSite"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"        
+        />
+    
     <LinearLayout 
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
