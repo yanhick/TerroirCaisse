@@ -44,6 +44,12 @@
             android:layout_height="wrap_content"
         	android:layout_width="wrap_content"
         	android:src="@drawable/twitter" />
+          <ImageButton
+    		android:id="@+id/sharingButton"
+		    android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+		    android:src="@drawable/sharing" />
+        
     </LinearLayout>
 
 </RelativeLayout>
