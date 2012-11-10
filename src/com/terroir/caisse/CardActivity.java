@@ -10,7 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +37,7 @@ public class CardActivity extends Activity {
 
 	private static String INSTAGRAM_TAGS = "https://api.instagram.com/v1/tags/";
 	
-	private static String INSTAGRAM_ACCESS_TOKEN = "?access_token=49812874.f59def8.7faedd01ba4845ffa9cee60a7d369f02";
+	private static String INSTAGRAM_ACCESS_TOKEN = "/media/recent?access_token=49812874.f59def8.7faedd01ba4845ffa9cee60a7d369f02";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +94,59 @@ public class CardActivity extends Activity {
 	}
 	
 	private void onInstagramLoaded(String result) {
+		
+		ArrayList<InstagramVO> instagramData = new ArrayList<CardActivity.InstagramVO>();
+		
 		try {
 			JSONObject jsonObject = new JSONObject(result);
+			
+			JSONArray dataArray = jsonObject.getJSONArray("data");
+			int length = dataArray.length();
+			for (int i = 0; i < length; i++)
+			{
+				InstagramVO instagramVO = new InstagramVO();
+				
+				JSONObject data = dataArray.getJSONObject(i);
+				try{
+					
+					if (data.has("caption") == true)
+					{
+						JSONObject caption = data.getJSONObject("caption");
+						instagramVO.caption = caption.getString("text");
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+				try{
+					
+					if (data.has("images") == true)
+					{
+						JSONObject images = data.getJSONObject("images");
+						instagramVO.thumbnail = images.getJSONObject("thumbnail").getString("url");
+						instagramVO.picture = images.getJSONObject("standard_resolution").getString("url");
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+				instagramData.add(instagramVO);
+			}
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private class InstagramVO {
+		public String thumbnail;
+		public String picture;
+		public String caption;
 	}
 	
 	private class EndCallListener extends PhoneStateListener {
