@@ -34,9 +34,7 @@
         <activity android:name=".FavorisActivity" 
             android:screenOrientation="portrait"
             />
-        <activity android:name=".BlackBerryActivity" 
-            android:screenOrientation="portrait"
-			/>
+        
         
         <activity android:name=".MainActivity" android:theme="@android:style/Theme.NoTitleBar" 
             android:screenOrientation="portrait">
