@@ -1,12 +1,18 @@
 package com.terroir.caisse;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,7 +33,9 @@ public class CardActivity extends Activity {
 	
 	public static String TAG = CardActivity.class.getSimpleName();
 
-	private static String INSTAGRAM = "https://api.instagram.com/";
+	private static String INSTAGRAM_TAGS = "https://api.instagram.com/v1/tags/";
+	
+	private static String INSTAGRAM_ACCESS_TOKEN = "?access_token=49812874.f59def8.7faedd01ba4845ffa9cee60a7d369f02";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,17 @@ public class CardActivity extends Activity {
 			TextView websiteText = (TextView) findViewById(R.id.txtViewWebSite);
 			websiteText.setText(website);
 			
+			String escapedName = "";
+			if (name == null) {
+				escapedName = "nofilter";
+			}
+			else {
+				escapedName = name.replace(" ", "_");
+			}
+			
+			InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM_TAGS + name + INSTAGRAM_ACCESS_TOKEN);
+					
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -69,14 +88,16 @@ public class CardActivity extends Activity {
 			    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));			
 			    CardActivity.this.startActivity(intent);
 			}
-		});	
-		
-		InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM);
-		
+		});		
 	}
 	
 	private void onInstagramLoaded(String result) {
-		Log.i("", result);
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private class EndCallListener extends PhoneStateListener {
@@ -120,10 +141,7 @@ public class CardActivity extends Activity {
 		// a string.
 		private String downloadUrl(String urlAsString) throws IOException {
 		    InputStream is = null;
-		    // Only display the first 500 characters of the retrieved
-		    // web page content.
-		    int len = 500;
-		        
+
 		    try {
 		    	URL url = new URL(urlAsString);
 		        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -138,7 +156,7 @@ public class CardActivity extends Activity {
 		        is = conn.getInputStream();
 
 		        // Convert the InputStream into a string
-		        String contentAsString = readIt(is, len);
+		        String contentAsString = convertStreamToString(is);
 		        return contentAsString;
 		        
 		    // Makes sure that the InputStream is closed after the app is
@@ -149,16 +167,33 @@ public class CardActivity extends Activity {
 		        } 
 		   }
 		}
-		
-		// Reads an InputStream and converts it to a String.
-		public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-		    Reader reader = null;
-		    reader = new InputStreamReader(stream, "UTF-8");        
-		    char[] buffer = new char[len];
-		    reader.read(buffer);
-		    return new String(buffer);
-		}
+		public String convertStreamToString(InputStream is)
+	            throws IOException {
+	        //
+	        // To convert the InputStream to String we use the
+	        // Reader.read(char[] buffer) method. We iterate until the
+	        // Reader return -1 which means there's no more data to
+	        // read. We use the StringWriter class to produce the string.
+	        //
+	        if (is != null) {
+	            Writer writer = new StringWriter();
 
+	            char[] buffer = new char[1024];
+	            try {
+	                Reader reader = new BufferedReader(
+	                        new InputStreamReader(is, "UTF-8"));
+	                int n;
+	                while ((n = reader.read(buffer)) != -1) {
+	                    writer.write(buffer, 0, n);
+	                }
+	            } finally {
+	                is.close();
+	            }
+	            return writer.toString();
+	        } else {        
+	            return "";
+	        }
+	    }
 	}
 
 }
