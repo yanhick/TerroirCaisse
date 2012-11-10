@@ -30,6 +30,10 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ImageButton;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.content.Intent;
 
 public class CardActivity extends Activity {
 	
@@ -38,6 +42,16 @@ public class CardActivity extends Activity {
 	private static String INSTAGRAM_TAGS = "https://api.instagram.com/v1/tags/";
 	
 	private static String INSTAGRAM_ACCESS_TOKEN = "/media/recent?access_token=49812874.f59def8.7faedd01ba4845ffa9cee60a7d369f02";
+	
+    private void shareIt(){
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Here is the share content body";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +104,17 @@ public class CardActivity extends Activity {
 			    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));			
 			    CardActivity.this.startActivity(intent);
 			}
-		});		
+		});	
+		
+        ImageButton sharingButton = (ImageButton) findViewById(R.id.sharingButton);
+        sharingButton.setImageResource(R.drawable.sharing);
+        
+        sharingButton.setOnClickListener(new View.OnClickListener() {
+          public void onClick(View v) {
+            shareIt();
+          }
+        });
+
 	}
 	
 	private void onInstagramLoaded(String result) {
