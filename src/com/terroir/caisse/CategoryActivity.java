@@ -35,7 +35,7 @@ public class CategoryActivity extends Activity {
         while (cur.isAfterLast() == false) {
         	String category = cur.getString(index);
         	map.put(category, 0);
-        	Log.i(TAG, "category: "+category);
+        	Log.i(TAG, "category: "+category);        	
         	cur.moveToNext();
         }  
         cur.close();
