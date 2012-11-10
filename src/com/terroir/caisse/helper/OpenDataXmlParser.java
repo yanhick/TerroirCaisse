@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.terroir.caisse.data.Producer;
 
+import android.util.Log;
 import android.util.Xml;
 
 /**
@@ -20,14 +21,15 @@ import android.util.Xml;
  * where each list element represents a single entry (post) in the XML feed.
  */
 public class OpenDataXmlParser {
+	public static final String TAG = OpenDataXmlParser.class.getSimpleName();
     private static final String ns = null;
 
     // Given a string representation of a URL, sets up a connection and gets an input stream.
     public InputStream downloadUrl(String urlString) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setReadTimeout(10000 /* milliseconds */);
-        conn.setConnectTimeout(15000 /* milliseconds */);
+        //conn.setReadTimeout(10000 /* milliseconds */);
+        //conn.setConnectTimeout(15000 /* milliseconds */);
         conn.setRequestMethod("GET");
         conn.setDoInput(true);
         // Starts the query
@@ -52,47 +54,108 @@ public class OpenDataXmlParser {
     
     private List<Producer> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List<Producer> entries = new ArrayList<Producer>();
-
         parser.require(XmlPullParser.START_TAG, ns, "feed");
         while (parser.next() != XmlPullParser.END_TAG) {
+        	Log.i(TAG, "readFeed- parser name "+parser.getName()+" parser text: "+parser.getText());
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
             // Starts by looking for the entry tag
             if (name.equals("entry")) {
-                entries.add(readEntry(parser));
+                //entries.add(readEntry(parser));
+            } else if(name.equals("content")) {
+            	Log.i(TAG, "content readed");
+            	entries.add(readContent(parser));
             } else {
                 skip(parser);
             }
         }
         return entries;
     }
-    private Producer readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "entry");
-        String title = null;
-        String summary = null;
-        String link = null;
-        while (parser.next() != XmlPullParser.END_TAG) {
+    
+
+    // For the tags title and summary, extracts their text values.
+    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String result = "";
+        if (parser.next() == XmlPullParser.TEXT) {
+            result = parser.getText();
+            parser.nextTag();
+        }
+        return result;
+    }       
+    
+ // Processes summary tags in the feed.
+    private Producer readContent(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "content");
+        parser.nextTag(); // jump to the child element
+        
+        Producer producer = new Producer();
+        String numro = "";
+        String type_voie = "";
+        String voie = "";
+        while (parser.next() != XmlPullParser.END_TAG) {        
+        	Log.i(TAG, "readContent- parser name "+parser.getName()+" parser text: "+parser.getText());
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("title")) {
-                title = readTitle(parser);
-            } else if (name.equals("summary")) {
-                summary = readSummary(parser);
-            } else if (name.equals("link")) {
-                link = readLink(parser);
+            if (name.equals("d:raisonsociale")) {
+                producer.raison_social = readText(parser);
+            } else if (name.equals("d:soustype")) {
+            	producer.sous_type = readText(parser);
+            } else if (name.equals("d:tlphone")) {
+            	producer.telephone = readText(parser).replace(" ", "");
+            } else if(name.equals("d:mail")) {
+            	producer.mail = readText(parser);            	
+            } else if(name.equals("d:numro")) {
+            	numro = readText(parser);            	
+            } else if(name.equals("d:typedevoie")) {
+            	type_voie = readText(parser);            	
+            } else if(name.equals("d:voie")) {
+            	voie = readText(parser);            	
+            } else if(name.equals("d:ville")) {
+            	producer.ville = readText(parser);            	
+            } else if(name.equals("d:codepostal")) {
+            	producer.code_postal = readText(parser);            	
+            } else if(name.equals("d:latitude")) {
+            	producer.latitude = Double.parseDouble(readText(parser));            	
+            } else if(name.equals("d:longitude")) {
+            	producer.longitude = Double.parseDouble(readText(parser));            	
             } else {
-                skip(parser);
+            	Log.i(TAG, "Skiping a tag"+parser.toString());
+            	skip(parser);
             }
         }
-        //return new Producer(title, summary, link);
-        return null;
+        if(!numro.equals("") && !type_voie.equals("") && !voie.equals(""))
+        	producer.address = numro + " " + type_voie + " " + voie;
+        Log.i(TAG, producer.toString());
+        parser.nextTag(); // jump to the child element
+        parser.require(XmlPullParser.END_TAG, ns, "content");        
+        parser.nextTag();
+        return producer;
     }
-    
-/*
+
+    // Skips tags the parser isn't interested in. Uses depth to handle nested tags. i.e.,
+    // if the next tag after a START_TAG isn't a matching END_TAG, it keeps going until it
+    // finds the matching END_TAG (as indicated by the value of "depth" being 0).
+    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+            case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+            case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
+    }
+    /*
     private List<Entry> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List<Entry> entries = new ArrayList<Entry>();
 
@@ -153,66 +216,4 @@ public class OpenDataXmlParser {
         return new Entry(title, summary, link);
     }
 */
-    // Processes title tags in the feed.
-    private String readTitle(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "title");
-        String title = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "title");
-        return title;
-    }
-
-    // Processes link tags in the feed.
-    private String readLink(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String link = "";
-        parser.require(XmlPullParser.START_TAG, ns, "link");
-        String tag = parser.getName();
-        String relType = parser.getAttributeValue(null, "rel");
-        if (tag.equals("link")) {
-            if (relType.equals("alternate")) {
-                link = parser.getAttributeValue(null, "href");
-                parser.nextTag();
-            }
-        }
-        parser.require(XmlPullParser.END_TAG, ns, "link");
-        return link;
-    }
-
-    // Processes summary tags in the feed.
-    private String readSummary(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "summary");
-        String summary = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "summary");
-        return summary;
-    }
-
-    // For the tags title and summary, extracts their text values.
-    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String result = "";
-        if (parser.next() == XmlPullParser.TEXT) {
-            result = parser.getText();
-            parser.nextTag();
-        }
-        return result;
-    }
-
-    // Skips tags the parser isn't interested in. Uses depth to handle nested tags. i.e.,
-    // if the next tag after a START_TAG isn't a matching END_TAG, it keeps going until it
-    // finds the matching END_TAG (as indicated by the value of "depth" being 0).
-    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-            case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-            case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
-            }
-        }
-    }
-
 }

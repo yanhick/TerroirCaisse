@@ -13,6 +13,8 @@ public class Producer {
 	public double latitude;
 	public double longitude;
 	
+	public Producer() {}
+	
 	public Producer(String name, String type, String address, String telephone) {
 		this.raison_social = name;
 		this.sous_type = type;
@@ -20,4 +22,7 @@ public class Producer {
 		this.telephone = telephone;
 	}
 	
+	public String toString() {
+		return "{raison_social: '"+raison_social+"', sous_type:'"+sous_type+"', address:'"+address+"', ville: '"+ville+"', code_postal: '"+code_postal+"', telephone:'"+telephone+"', mail:'"+mail+"', latitude:'"+latitude+"', longitude:'"+longitude+"'}";
+	}
 }

@@ -1,9 +1,6 @@
 package com.terroir.caisse.adapter;
 
-import java.util.ArrayList;
-
-import com.terroir.caisse.R;
-import com.terroir.caisse.data.Producer;
+import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.terroir.caisse.R;
+import com.terroir.caisse.data.Producer;
+
 public class HomeAdapter extends BaseAdapter {
 
 	private LayoutInflater myInflater;
-	private ArrayList<Producer> producers;
+	private List<Producer> producers;
 	
-	public HomeAdapter (Context context, ArrayList<Producer> _producers) {
+	public HomeAdapter (Context context, List<Producer> _producers) {
 		this.myInflater = LayoutInflater.from(context);
 		this.producers = _producers;
 	}
