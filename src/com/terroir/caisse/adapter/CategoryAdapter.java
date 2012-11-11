@@ -1,10 +1,9 @@
 package com.terroir.caisse.adapter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,26 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.terroir.caisse.R;
+import com.terroir.caisse.data.Category;
 
 public class CategoryAdapter extends BaseAdapter {
 
-	public static final Map<String, Integer> CATEGORIES = new HashMap<String, Integer>(); 
-	static {
-		CATEGORIES.put("MIEL", R.drawable.confit); 
-		CATEGORIES.put("LAITIERS", R.drawable.lait); 
-		CATEGORIES.put("OLIVES", R.drawable.olive); 
-		CATEGORIES.put("BOULANGERIE", R.drawable.boulang); 
-		CATEGORIES.put("FRUITS", R.drawable.fruit_et_legume); 
-		CATEGORIES.put("VIANDE", R.drawable.viande); 
-		CATEGORIES.put("AROME", R.drawable.parfum); 
-		CATEGORIES.put("GOURMANDISES", R.drawable.bonbons); 
-		CATEGORIES.put("VOLAILLES", R.drawable.poussin); 
-		CATEGORIES.put("PLANTES", R.drawable.vegetal); 
-		CATEGORIES.put("SEL", R.drawable.sel); 
-		CATEGORIES.put("SPIRITUEUX", R.drawable.bonbons); 
-		CATEGORIES.put("JUS", R.drawable.jus_de_fruit);	
-	}
-	
 	private LayoutInflater myInflater;
 	private List<String> categories;
 	private List<Integer> counts;
@@ -78,9 +61,16 @@ public class CategoryAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		try {
+			Log.i("getView", "category: "+categories.get(position)+" - counts "+counts.get(position));
 			holder.category.setText(""+categories.get(position));
-			holder.count.setText(counts.get(position));		
-			holder.icon.setImageResource(R.drawable.logo);	
+			holder.count.setText(String.valueOf(counts.get(position)));		
+			int drawable = -1;
+			for(String category: Category.get()) {
+				if(categories.get(position).toUpperCase().contains(category))
+					drawable = Category.get(category);
+			}
+			if(drawable != -1)
+				holder.icon.setImageResource(drawable);	
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

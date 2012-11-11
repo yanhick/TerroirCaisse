@@ -5,26 +5,27 @@
   android:layout_height="wrap_content">
   
     <ImageView android:id="@+id/imgCategory"
+        android:contentDescription="image category"
         android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content"
 	    android:layout_centerVertical="true"
 	    android:layout_alignParentLeft="true"	    
         />
-	<TextView android:text="TextView01" 
+	<TextView android:id="@+id/txtCategory"
+	    android:text="TextView01" 
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:textSize="20dip"
-	    android:id="@+id/txtCategory"
+	    android:textSize="20dip"	    
 	    android:layout_toRightOf="@id/imgCategory">
 	    
 	</TextView>
 		
-	<TextView android:text="count" 
+	<TextView android:id="@+id/txtCount"
+	    android:text="count" 
 	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:id="@+id/txtCount"
+	    android:layout_height="wrap_content" 	    
 	    android:layout_alignParentRight="true"
-	    android:layout_centerVertical="true">	    
+	    android:layout_alignParentBottom="true">	    
 	</TextView>
 	
 </RelativeLayout>

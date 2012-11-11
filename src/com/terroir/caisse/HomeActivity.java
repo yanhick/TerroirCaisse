@@ -178,7 +178,7 @@ public class HomeActivity extends Activity {
 
         protected void onPreExecute() {
         	this.dialog.setTitle("TerroirCaisse");
-        	this.dialog.setIcon(R.drawable.logo);
+        	//this.dialog.setIcon(R.drawable.logo);
         	this.dialog.setMessage("Chargement en cours...");
         	//this.dialog.setProgressStyle(R.style.CustomDialogTheme);
         	this.dialog.setCancelable(false);
