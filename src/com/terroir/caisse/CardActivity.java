@@ -11,6 +11,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +40,8 @@ import android.widget.ImageButton;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 
 public class CardActivity extends Activity {
 	
@@ -144,15 +147,9 @@ public class CardActivity extends Activity {
 				}
 			});	
 			
-			String escapedName = "";
-			if (name == null) {
-				escapedName = "nofilter";
-			}
-			else {
-				escapedName = name.replace(" ", "_");
-			}
+			String hashTag = getHashTag();
 			
-			InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM_TAGS + name + INSTAGRAM_ACCESS_TOKEN);
+			InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM_TAGS + hashTag + INSTAGRAM_ACCESS_TOKEN);
 					
 			
 		}catch(Exception e) {
@@ -168,8 +165,59 @@ public class CardActivity extends Activity {
           }
         });
         
+        ImageView tweetButton = (ImageView) findViewById(R.id.tweetButton);
         
+        sharingButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              tweetIt();
+            }
+          });
+          
+        
+        
+	}
+	
+	private String getHashTag(){
+		
+		Intent intent = getIntent();
+		
+		String name = intent.getStringExtra("name");
+		
+		String escapedName = "";
+		if (name == null) {
+			escapedName = "nofilter";
+		}
+		else {
+			escapedName = name.replace(" ", "_");
+		}
+		escapedName = "#"+escapedName;
+		return escapedName;
+	}
+	
+	public Intent findTwitterClient() {
+		final String[] twitterApps = {
+				// package // name - nb installs (thousands)
+				"com.twitter.android", // official - 10 000
+				"com.twidroid", // twidroyd - 5 000
+				"com.handmark.tweetcaster", // Tweecaster - 5 000
+				"com.thedeck.android" // TweetDeck - 5 000 
+				};
+		Intent tweetIntent = new Intent();
+		tweetIntent.setType("text/plain");
+		final PackageManager packageManager = getPackageManager();
+		List<ResolveInfo> list = packageManager.queryIntentActivities(
+				tweetIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
+		for (int i = 0; i < twitterApps.length; i++) {
+			for (ResolveInfo resolveInfo : list) {
+				String p = resolveInfo.activityInfo.packageName;
+				if (p != null && p.startsWith(twitterApps[i])) {
+					tweetIntent.setPackage(p);
+					return tweetIntent;
+				}
+			}
+		}
+		return null;
 	}
 	
 	private void onInstagramLoaded(String result) {
@@ -226,6 +274,17 @@ public class CardActivity extends Activity {
 			ImageAdapter adapter = new ImageAdapter(this, imageArray);
 			gridView.setAdapter(adapter);
 		
+	}
+	
+	private void tweetIt(){
+		 Intent sharingIntent = findTwitterClient();
+        sharingIntent.setType("text/plain");
+        
+        
+        String shareBody = getHashTag();
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
 	}
 	
 	private void shareIt(){

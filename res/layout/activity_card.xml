@@ -95,6 +95,12 @@
             android:layout_width="50px"
             android:layout_height="50px"
             android:src="@drawable/sharing" />
+        
+         <ImageButton
+            android:id="@+id/tweetButton"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:src="@drawable/sharing" />
     </LinearLayout>
 
 
