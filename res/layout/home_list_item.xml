@@ -6,15 +6,17 @@
 	<TextView android:text="TextView01" 
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:textSize="20dip"
-	    android:id="@+id/txtNom">
+	    android:textSize="15dip"
+	    android:id="@+id/txtNom"
+	    android:textColor="@color/white">
 	    
 	</TextView>
 	<TextView android:text="TextView02" 
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
 	    android:id="@+id/txtDetail"
-	    android:layout_below="@id/txtNom">
+	    android:layout_below="@id/txtNom"
+	    android:textColor="@color/white">
 	    
 	</TextView>
 	
@@ -24,6 +26,7 @@
 	    android:id="@+id/txtDistance"
 	    android:layout_alignParentRight="true"
 	    android:layout_alignParentBottom="true"
+	    android:textColor="@color/white"
 	    >
 	    
 	</TextView>
