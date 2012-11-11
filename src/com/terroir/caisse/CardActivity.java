@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,9 +116,22 @@ public class CardActivity extends Activity {
 				}
 			});	
 			
+			ImageView mapButton = (ImageView) findViewById(R.id.mapButton);
+			mapButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = getIntent();
+					Intent callIntent = new Intent(CardActivity.this, HomeMapActivity.class);			
+					CardActivity.this.startActivity(callIntent);
+					
+					
+				}
+			});
+			
 			String hashTag = getHashTag();
 			
-			InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM_TAGS + hashTag + INSTAGRAM_ACCESS_TOKEN);
+			InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM_TAGS + "terroir" + INSTAGRAM_ACCESS_TOKEN);
 					
 			
 		}catch(Exception e) {
