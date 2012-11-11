@@ -64,7 +64,30 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
 	    String provider = lm.getBestProvider(criteria, false);
 	    monLocation = lm.getLastKnownLocation(provider);
 	    set(monLocation);
-	    draw(HomeActivity.producers);
+	    boolean filter = false;
+	    Producer p = null;
+	    try {
+	    	Intent intent = getIntent();
+	    	p = new Producer();
+	    	p.raison_social = intent.getStringExtra("raison_social");
+	    	p.latitude = Double.parseDouble(intent.getStringExtra("latitude"));
+	    	p.longitude = Double.parseDouble(intent.getStringExtra("longitude"));
+	    	p.sous_type = intent.getStringExtra("sous_type");
+	    	p.address = intent.getStringExtra("address");
+	    	p.mail = intent.getStringExtra("mail");
+	    	p.telephone = intent.getStringExtra("telephone");
+	    	p.ville = intent.getStringExtra("ville");
+	    	filter = true;
+	    }catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+	    if(filter && p!=null) {
+	    	List<Producer> ps = new ArrayList<Producer>();
+	    	ps.add(p);
+	    	draw(ps);
+	    }else {
+		    draw(HomeActivity.producers);	    	
+	    }
     }
     
     public void draw(List<Producer> producers) {
