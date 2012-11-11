@@ -64,6 +64,7 @@ public class CategoryActivity extends Activity {
         }
         for(int i=0; i<categories.size(); i++) {
             Log.i(TAG, "Categories "+categories.get(i)+" = "+counts.get(i));	
+            
         }
         CategoryAdapter adapter = new CategoryAdapter(this, categories, counts); 
         list.setAdapter(adapter);
