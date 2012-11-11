@@ -34,7 +34,9 @@
         <activity android:name=".FavorisActivity" 
             android:screenOrientation="portrait"
             />
-        
+        <activity android:name=".FilteredProducersActivity" 
+            android:screenOrientation="portrait"
+            />
         
         <activity android:name=".MainActivity" android:theme="@style/tabTheme"
             android:screenOrientation="portrait">

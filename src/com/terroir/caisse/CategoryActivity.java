@@ -6,16 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.terroir.caisse.adapter.CategoryAdapter;
-import com.terroir.caisse.data.DBAdapter;
 
 public class CategoryActivity extends Activity {
+	
+	public CategoryAdapter adapter;
 	public String TAG = CategoryActivity.class.getSimpleName();
 	
 	public static final String[] __CATEGORIES__ = new String[] {
@@ -54,19 +57,44 @@ public class CategoryActivity extends Activity {
 */
         setContentView(R.layout.activity_category);
         ListView list = (ListView) findViewById(R.id.lstCategories); 
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("MIEL",0); 
+        map.put("LAITIER", 0); 
+        map.put("OLIVE", 0); 
+        map.put("BOULANGERIE", 0); 
+        map.put("FRUIT",0); 
+        map.put("VIANDE",0); 
+        map.put("GOURMANDISE",0); 
+        map.put("VOLAILLE",0); 
+        map.put("PLANTE",0); 
+        map.put("SEL",0); 
+        map.put("SPIRITUEUX",0); 
+        map.put("JUS",0);
+        for(String category: HomeActivity.categories.keySet()) {
+        	for(String root: map.keySet()) {
+        		if(category!=null && category.toUpperCase().contains(root)) {
+        			int count = HomeActivity.categories.get(category).size();  
+        			map.put(root, map.get(root) + count);        			
+        		}
+        	}
+        }
         List<String> categories = new ArrayList<String>();
         List<Integer> counts = new ArrayList<Integer>();
-        for(String category: HomeActivity.categories.keySet()) {
-        	int count = HomeActivity.categories.get(category).size();        	        	      
-        	categories.add(category);
+        for(String root: map.keySet()) {
+        	int count = map.get(root);        	        	      
+        	categories.add(root);
         	counts.add(count);        	    
         }
-        for(int i=0; i<categories.size(); i++) {
-            Log.i(TAG, "Categories "+categories.get(i)+" = "+counts.get(i));	
-            
-        }
-        CategoryAdapter adapter = new CategoryAdapter(this, categories, counts); 
-        list.setAdapter(adapter);
         
+        adapter = new CategoryAdapter(this, categories, counts); 
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView l, View v, int position, long id) {				
+				Intent wake = new Intent(CategoryActivity.this, FilteredProducersActivity.class);
+				wake.putExtra("sous_type", (String) adapter.getItem(position));
+				startActivity(wake);
+			}
+		});
     }
 }

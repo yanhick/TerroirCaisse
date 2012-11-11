@@ -67,6 +67,8 @@ public class CategoryAdapter extends BaseAdapter {
 			int drawable = Category.get(categories.get(position));			
 			if(drawable != -1)
 				holder.icon.setImageResource(drawable);	
+			else 
+				holder.icon.setImageResource(R.drawable.divers);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
