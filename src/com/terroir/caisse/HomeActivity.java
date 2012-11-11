@@ -65,7 +65,16 @@ public class HomeActivity extends Activity {
 			public void onItemClick(AdapterView l, View v, int position, long id) {
 				Producer producer = (Producer) adapter.getItem(position);    			   
 				Intent wake = new Intent(HomeActivity.this, CardActivity.class);				
-			    wake.putExtra("name", producer.raison_social);
+			    wake.putExtra("raison_social", producer.raison_social);
+			    wake.putExtra("address", producer.address);
+			    wake.putExtra("code_postal", producer.code_postal);
+			    wake.putExtra("distance", String.valueOf(producer.distance));
+			    wake.putExtra("latitude", producer.latitude);
+			    wake.putExtra("longitude", producer.longitude);
+			    wake.putExtra("mail", producer.mail);
+			    wake.putExtra("sous_type", producer.sous_type);
+			    wake.putExtra("telephone", producer.telephone);
+			    wake.putExtra("ville", producer.ville);
 			    startActivity(wake);			    			   
 			}
 		});
@@ -73,7 +82,7 @@ public class HomeActivity extends Activity {
         btnMap.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				Intent wake = new Intent(HomeActivity.this, HomeMapActivity.class);
+				Intent wake = new Intent(HomeActivity.this, HomeMapActivity.class);				
 				startActivity(wake);
 			}
 		});
