@@ -80,7 +80,12 @@ public class CategoryAdapter extends BaseAdapter {
 		try {
 			holder.category.setText(""+categories.get(position));
 			holder.count.setText(counts.get(position));		
-			holder.icon.setImageResource(R.drawable.logo);	
+			int drawable = R.drawable.logo;
+			for(String category: CATEGORIES.keySet()) {
+				if(categories.get(position).contains(category))
+					drawable = CATEGORIES.get(position);
+			}
+			holder.icon.setImageResource(drawable);	
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
