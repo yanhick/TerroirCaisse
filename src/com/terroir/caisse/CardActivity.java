@@ -64,11 +64,12 @@ public class CardActivity extends Activity {
 			
 			if (name == null)
 			{
-				name = "raison_social";
+				name = "Boulanger";
 			}
 			
 			TextView text = (TextView) findViewById(R.id.txtViewName);
 			text.setText(name);
+
 			
 			String mail = intent.getStringExtra("mail");
 			
@@ -86,6 +87,10 @@ public class CardActivity extends Activity {
 			
 			String phone = intent.getStringExtra("telephone");
 			
+			if (phone == null)
+			{
+				phone = "0346782132";
+			}
 
 			TextView phoneText = (TextView) findViewById(R.id.txtPhone);
 			phoneText.setText(phone);
