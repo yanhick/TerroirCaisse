@@ -3,19 +3,23 @@ package com.terroir.caisse;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Window;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends TabActivity implements OnTabChangeListener {
 
+	protected TabHost tabHost;
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);		
 		
 		Resources ressources = getResources(); 
-		TabHost tabHost = getTabHost(); 
+		tabHost = getTabHost(); 
 		
 		// Android tab
 		Intent intentHome = new Intent().setClass(this, HomeActivity.class);
@@ -34,7 +38,7 @@ public class MainActivity extends TabActivity {
 		// Favorite tab
 		Intent intentFavoris = new Intent().setClass(this, FavorisActivity.class);
 		TabSpec tabSpecFavoris = tabHost
-			.newTabSpec("Favoris")
+			.newTabSpec("Favoris")			
 			.setIndicator("", ressources.getDrawable(R.drawable.icon_favoris_config))
 			.setContent(intentFavoris);
 				
@@ -45,6 +49,20 @@ public class MainActivity extends TabActivity {
 		
 		//set Windows tab as default (zero based)
 		tabHost.setCurrentTab(0);
+		setSelectedTabColor();
 	}
 
+	private void setSelectedTabColor() {
+        for(int i=0;i<tabHost.getTabWidget().getChildCount();i++) {  
+            tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#aaa97b"));              
+        }  
+        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#b95e41"));   
+        
+        tabHost.setOnTabChangedListener(this);
+    }
+	
+	@Override  
+    public void onTabChanged(String tabId) {  
+        setSelectedTabColor(); 
+    } 
 }
