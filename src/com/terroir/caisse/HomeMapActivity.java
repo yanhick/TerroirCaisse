@@ -24,6 +24,7 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.terroir.caisse.data.Producer;
 
 public class HomeMapActivity extends MapActivity implements LocationListener {
 	
@@ -60,8 +61,20 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
 	    String provider = lm.getBestProvider(criteria, false);
 	    monLocation = lm.getLastKnownLocation(provider);
 	    set(monLocation);
+	    draw(HomeActivity.producers);
     }
-
+    
+    public void draw(List<Producer> producers) {
+    	if(producers != null)
+    	for(int i=0; i<producers.size() && i<30; i++) {
+    		Producer p = producers.get(i);
+    		GeoPoint point = new GeoPoint(microdegrees(p.latitude), microdegrees(p.longitude));
+        	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(R.drawable.marker));
+    		pinOverlay.addPoint(point);
+    		maMap.getOverlays().add(pinOverlay);
+    	}
+    }
+    
     protected GeoPoint marker(Location location) {
     	GeoPoint point = new GeoPoint(microdegrees(location.getLatitude()),microdegrees(location.getLongitude()));
     	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(R.drawable.marker));

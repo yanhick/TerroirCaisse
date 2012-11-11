@@ -23,7 +23,8 @@
 	    android:layout_height="wrap_content" 
 	    android:id="@+id/txtDistance"
 	    android:layout_alignParentRight="true"
-	    android:layout_centerVertical="true">
+	    android:layout_alignParentBottom="true"
+	    >
 	    
 	</TextView>
 	

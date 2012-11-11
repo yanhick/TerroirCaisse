@@ -4,6 +4,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -11,8 +12,8 @@ public class MainActivity extends TabActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-
+		setContentView(R.layout.main);		
+		
 		Resources ressources = getResources(); 
 		TabHost tabHost = getTabHost(); 
 		

@@ -1,5 +1,8 @@
 package com.terroir.caisse.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +14,8 @@ public class DBAdapter {
 	DatabaseHelper	DBHelper;
 	Context			context;
 	SQLiteDatabase	db;
+	
+	public static String TAG = DBAdapter.class.getSimpleName();
 	
 	public DBAdapter(Context context){
 		this.context = context;
@@ -68,18 +73,46 @@ public class DBAdapter {
 				"longitude"}, null, null, null, null, null);
 	}
 
-	public Cursor categories() {
-		return db.query("producers", new String[]{"sous_type"}, null, null, "sous_type", null, null);
+	public Map<String, Integer> categories() {
+		Map<String, Integer> map = new HashMap<String, Integer>(); 
+		Cursor cur = db.query("producers", new String[]{"sous_type"}, null, null, "sous_type", null, null);
+		cur.moveToFirst();
+        int index = cur.getColumnIndex("sous_type");
+        while (cur.isAfterLast() == false) {
+        	String category = cur.getString(index);
+        	map.put(category, 0);
+        	Log.i(TAG, "category: "+category);        	
+        	cur.moveToNext();
+        }  
+        cur.close(); 
+        return map;
 	}
+	
 	public Cursor query(String category) {
-		return db.query("producers", new String[]{"raison_social"}, "sous_type = " + category, null, "raison_social", null, null);
+		return db.query("producers", new String[]{"raison_social"}, "sous_type = '" + category + "'", null, "raison_social", null, null);
 	}
+	
 	public int count(String key, String value) {
-		String SQL_STATEMENT = "SELECT COUNT(*) FROM producers WHERE "+key+"=?";
-		Cursor cursor = db.rawQuery(SQL_STATEMENT, new String[] { value });
-		cursor.moveToFirst();
-		int count = cursor.getInt(0);
-		cursor.close();      
+		Log.i(TAG, key+"="+value);
+		//int count = -1;
+		Cursor cursor = db.query("producers", new String[]{key}, key + " like '%" + value+"%'", null, null, null, null);
+		return cursor.getCount();
+/*		
+		try {
+			String SQL_STATEMENT = "SELECT COUNT(*) AS count FROM producers WHERE "+key+"=?";
+			Log.i(TAG, SQL_STATEMENT);
+			cursor = db.rawQuery(SQL_STATEMENT, new String[] { value });			
+			if(cursor.moveToFirst()) {
+				int index = cursor.getColumnIndex(key);
+				count = cursor.getInt(index);
+			}			 
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(cursor!=null)
+				cursor.close();
+		}		     		
 		return count;
+*/
 	}
 }

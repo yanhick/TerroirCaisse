@@ -60,11 +60,14 @@ public class CategoryAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		try {
+			holder.category.setText(""+categories.get(position));
+			holder.count.setText(counts.get(position));		
+			holder.icon.setImageResource(R.drawable.logo);	
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
-		holder.category.setText(categories.get(position));
-		holder.count.setText(counts.get(position));		
-		holder.icon.setImageResource(R.drawable.logo);
-
 		return convertView;	
 	}
 

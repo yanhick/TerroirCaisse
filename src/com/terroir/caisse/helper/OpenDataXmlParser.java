@@ -31,8 +31,7 @@ public class OpenDataXmlParser {
 
     public OpenDataXmlParser(Context context) {
     	this.context = context;
-    	db = new DBAdapter(context);    
-    	db.drop();
+    	db = new DBAdapter(context);        	
     }
     
     // Given a string representation of a URL, sets up a connection and gets an input stream.
