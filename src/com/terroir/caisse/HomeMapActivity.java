@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.DrawFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -16,8 +15,10 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -77,6 +78,15 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
         	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(drawable));
     		pinOverlay.addPoint(point);
     		maMap.getOverlays().add(pinOverlay);
+    		
+    		// display small text (raison_social) on top of the pin
+    		View popUp = getLayoutInflater().inflate(R.layout.map_popup, maMap, false);
+    		TextView txt = (TextView) popUp.findViewById(R.id.txtMapPopup);
+    		txt.setText(p.raison_social);
+    		MapView.LayoutParams mapParams = new MapView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 
+                    ViewGroup.LayoutParams.WRAP_CONTENT, point, 10, -30,
+                    MapView.LayoutParams.BOTTOM_CENTER);
+    		maMap.addView(popUp, mapParams);
     	}
     }
     
