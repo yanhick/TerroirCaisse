@@ -3,18 +3,31 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content">
+  
+    <ImageView android:id="@+id/imgProducerCategory"
+        android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"
+	    android:contentDescription="category image"
+	    android:layout_centerVertical="true"
+	    android:paddingLeft="5dip"
+	    android:paddingRight="5dip"
+        />
 	<TextView android:text="TextView01" 
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
-	    android:textSize="20dip"
-	    android:id="@+id/txtNom">
+	    android:textSize="15dip"
+	    android:id="@+id/txtNom"
+	    android:textColor="@color/white"
+	    android:layout_toRightOf="@id/imgProducerCategory">
 	    
 	</TextView>
 	<TextView android:text="TextView02" 
 	    android:layout_width="wrap_content" 
 	    android:layout_height="wrap_content" 
 	    android:id="@+id/txtDetail"
-	    android:layout_below="@id/txtNom">
+	    android:layout_below="@id/txtNom"
+	    android:layout_toRightOf="@id/imgProducerCategory"
+	    android:textColor="@color/white">
 	    
 	</TextView>
 	
@@ -24,6 +37,7 @@
 	    android:id="@+id/txtDistance"
 	    android:layout_alignParentRight="true"
 	    android:layout_alignParentBottom="true"
+	    android:textColor="@color/white"
 	    >
 	    
 	</TextView>

@@ -15,8 +15,10 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -24,6 +26,7 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.terroir.caisse.data.Category;
 import com.terroir.caisse.data.Producer;
 
 public class HomeMapActivity extends MapActivity implements LocationListener {
@@ -69,15 +72,27 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
     	for(int i=0; i<producers.size() && i<30; i++) {
     		Producer p = producers.get(i);
     		GeoPoint point = new GeoPoint(microdegrees(p.latitude), microdegrees(p.longitude));
-        	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(R.drawable.marker));
+    		int drawable = Category.pin(p.sous_type);
+    		if(drawable == -1)
+    			drawable = R.drawable.marker;
+        	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(drawable));
     		pinOverlay.addPoint(point);
     		maMap.getOverlays().add(pinOverlay);
+    		
+    		// display small text (raison_social) on top of the pin
+    		View popUp = getLayoutInflater().inflate(R.layout.map_popup, maMap, false);
+    		TextView txt = (TextView) popUp.findViewById(R.id.txtMapPopup);
+    		txt.setText(p.raison_social);
+    		MapView.LayoutParams mapParams = new MapView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 
+                    ViewGroup.LayoutParams.WRAP_CONTENT, point, 10, -30,
+                    MapView.LayoutParams.BOTTOM_CENTER);
+    		maMap.addView(popUp, mapParams);
     	}
     }
     
-    protected GeoPoint marker(Location location) {
+    protected GeoPoint marker(Location location, int drawable) {
     	GeoPoint point = new GeoPoint(microdegrees(location.getLatitude()),microdegrees(location.getLongitude()));
-    	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(R.drawable.marker));
+    	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(drawable));
 		pinOverlay.addPoint(point);
 		maMap.getOverlays().add(pinOverlay);
 		return point;
@@ -88,7 +103,7 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
     		monLocation = location;
 			Log.i(TAG, "Nouvelle position : " + location.getLatitude() + ", " + location.getLongitude());			
 			monControler.animateTo(new GeoPoint(microdegrees(location.getLatitude()),microdegrees(location.getLongitude())));			
-			monControler.setCenter(marker(location));
+			monControler.setCenter(marker(location, R.drawable.marker));
 		}
     }
     

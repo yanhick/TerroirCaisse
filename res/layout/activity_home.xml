@@ -5,7 +5,8 @@
     >
 	<ListView android:id="@+id/lstProducers"
 	    android:layout_width="fill_parent" 
-	    android:layout_height="fill_parent">	   
+	    android:layout_height="fill_parent"
+	    android:background="#351d11">	   
 	</ListView>
 	
 	<RelativeLayout
@@ -13,13 +14,17 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBottom="@id/lstProducers" >
-
-	    <Button
+
+	    <ImageButton
 	        android:id="@+id/btnHomeMap"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentBottom="true"
+	        android:background="#8c9e92"
+	        android:padding="10dip"
+	        android:src="@drawable/pinblanc"
 	        android:text="Show map" />
+
 <!--
 	    <Button
 	        android:id="@+id/btnHomeList"

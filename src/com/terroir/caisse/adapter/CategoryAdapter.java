@@ -64,13 +64,11 @@ public class CategoryAdapter extends BaseAdapter {
 			Log.i("getView", "category: "+categories.get(position)+" - counts "+counts.get(position));
 			holder.category.setText(""+categories.get(position));
 			holder.count.setText(String.valueOf(counts.get(position)));		
-			int drawable = -1;
-			for(String category: Category.get()) {
-				if(categories.get(position).toUpperCase().contains(category))
-					drawable = Category.get(category);
-			}
+			int drawable = Category.get(categories.get(position));			
 			if(drawable != -1)
 				holder.icon.setImageResource(drawable);	
+			else 
+				holder.icon.setImageResource(R.drawable.divers);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
