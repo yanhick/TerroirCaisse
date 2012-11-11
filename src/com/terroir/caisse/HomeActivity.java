@@ -2,8 +2,11 @@ package com.terroir.caisse;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -12,7 +15,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -22,6 +24,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -43,10 +48,16 @@ public class HomeActivity extends Activity {
 	protected Context context;
 	protected Location location;
 	
+	public static List<Producer> producers = null;
+	public static Map<String, List<Producer>> categories = new HashMap<String, List<Producer>>();
+	public static final String[] CATEGORIES = new String[] {
+		"MIEL", "LAITIERS", "OLIVES", "BOULANGERIE", "FRUITS", "VIANDE", "AROME", "GOURMANDISES", "VOLAILLES", "PLANTES", "SEL", "SPIRITUEUX", "JUS"};
+	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home);
+        Log.d(TAG, "HomeActivity lauched!");
         context = this;
         list = (ListView) HomeActivity.this.findViewById(R.id.lstProducers);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,29 +65,38 @@ public class HomeActivity extends Activity {
 			public void onItemClick(AdapterView l, View v, int position, long id) {
 				Producer producer = (Producer) adapter.getItem(position);    			   
 				Intent wake = new Intent(HomeActivity.this, CardActivity.class);				
-			    wake.putExtra("name", producer.raison_social);
+			    wake.putExtra("raison_social", producer.raison_social);
+			    wake.putExtra("address", producer.address);
+			    wake.putExtra("code_postal", producer.code_postal);
+			    wake.putExtra("distance", String.valueOf(producer.distance));
+			    wake.putExtra("latitude", producer.latitude);
+			    wake.putExtra("longitude", producer.longitude);
+			    wake.putExtra("mail", producer.mail);
+			    wake.putExtra("sous_type", producer.sous_type);
+			    wake.putExtra("telephone", producer.telephone);
+			    wake.putExtra("ville", producer.ville);
 			    startActivity(wake);			    			   
+			}
+		});
+        Button btnMap = (Button) findViewById(R.id.btnHomeMap);
+        btnMap.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				Intent wake = new Intent(HomeActivity.this, HomeMapActivity.class);				
+				startActivity(wake);
 			}
 		});
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);				
 		Criteria criteria = new Criteria();
 	    String provider = lm.getBestProvider(criteria, false);
 	    location = lm.getLastKnownLocation(provider);
-               
-        Button btnMap = (Button) findViewById(R.id.btnHomeMap);
-        btnMap.setOnClickListener(new OnClickListener() {			
-			@Override
-			public void onClick(View v) {
-				Intent wake = new Intent(HomeActivity.this, HomeMapActivity.class);
-				startActivity(wake);
-			}
-		});
+                       
         String ws_url = "http://dataprovence.cloudapp.net:8080/v1/dataprovencetourisme/ProducteursDuTerroir/";
         new ProgressTask().execute(ws_url);
     }
     
     protected void load(String url) throws IOException, XmlPullParserException {
-    	List<Producer> producers = null;
+    	producers = null;
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     	if(prefs.contains("initiated")){
     		//Toast.makeText(context, "Already initiated !", Toast.LENGTH_SHORT).show();
@@ -99,7 +119,16 @@ public class HomeActivity extends Activity {
 				list.setAdapter(adapter);
 		    }  		    
 		});    
-		
+		for(Producer p: producers) {
+			try {
+				if(!categories.containsKey(p.sous_type)) {						
+					categories.put(p.sous_type, new ArrayList<Producer>());
+				}
+				categories.get(p.sous_type).add(p);	
+			}catch(Exception e) {
+				e.printStackTrace();
+			}			
+		}
     }
    
     protected boolean isNetworkConnected() {
@@ -111,6 +140,34 @@ public class HomeActivity extends Activity {
     	} else    	
     		return true;    	
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {    
+/*        
+        case R.id.map_option:
+        	Intent wake = new Intent(HomeActivity.this, HomeMapActivity.class);
+			startActivity(wake);
+        	return true;
+        
+            case R.id.refresh_option:
+            	DBAdapter db = new DBAdapter(context);
+            	db.open();
+            	db.drop();            	
+            	return true;                      
+*/            	
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     
     private class ProgressTask extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog dialog;
