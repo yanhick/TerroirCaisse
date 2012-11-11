@@ -60,8 +60,7 @@ public class CategoryAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		try {
-			Log.i("getView", "category: "+categories.get(position)+" - counts "+counts.get(position));
+		try {			
 			holder.category.setText(""+categories.get(position));
 			holder.count.setText(String.valueOf(counts.get(position)));		
 			int drawable = Category.get(categories.get(position));			

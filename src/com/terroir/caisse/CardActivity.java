@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.example.gallery_test2.ImageAdapter;
 import com.example.gallery_test2.ImageData;
+import com.terroir.caisse.data.Producer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -57,6 +58,7 @@ public class CardActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_card);
+		final Producer producer = new Producer();		
 			
 		try {
 			Intent intent = getIntent();
@@ -66,20 +68,20 @@ public class CardActivity extends Activity {
 			{
 				name = "Boulanger";
 			}
-			
+			producer.raison_social = name;
 			TextView text = (TextView) findViewById(R.id.txtViewName);
 			text.setText(name);
 
 			
 			String mail = intent.getStringExtra("mail");
-			
+			producer.mail = mail;
 			TextView mailText = (TextView) findViewById(R.id.txtViewMail);
 			mailText.setText(mail);
 			
 			
 			
 			String website = intent.getStringExtra("addresse_web");
-			
+			producer.addresse_web = website;
 			TextView websiteText = (TextView) findViewById(R.id.txtViewWebSite);
 			websiteText.setText(website);
 			
@@ -91,7 +93,7 @@ public class CardActivity extends Activity {
 			{
 				phone = "0346782132";
 			}
-
+			producer.telephone = phone;
 			TextView phoneText = (TextView) findViewById(R.id.txtPhone);
 			phoneText.setText(phone);
 			
@@ -117,7 +119,16 @@ public class CardActivity extends Activity {
 			
 			InstagramLoader loader = (InstagramLoader) new InstagramLoader().execute(INSTAGRAM_TAGS + hashTag + INSTAGRAM_ACCESS_TOKEN);
 					
-			
+			producer.latitude = Double.parseDouble(intent.getStringExtra("latitude"));
+			producer.longitude = Double.parseDouble(intent.getStringExtra("longitude"));
+			ImageView bookmarkButton = (ImageView) findViewById(R.id.bookmarkButton);
+			bookmarkButton.setOnClickListener(new OnClickListener() {						
+				@Override				
+				public void onClick(View v) {				
+					FavorisActivity.add(producer);					
+					Log.i(TAG, "Bookmarking this producer: "+producer);
+				}				
+			});
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -138,8 +149,7 @@ public class CardActivity extends Activity {
               tweetIt();
             }
           });
-          
-        
+                  
         
 	}
 	

@@ -34,11 +34,8 @@ public class Category {
 		int drawable = -1;
 		if(key != null)
 		for(String category: Category.get()) {			
-			if(key.toUpperCase().contains(category)) {
-				Log.i("Category", key+" == "+category);
+			if(key.toUpperCase().contains(category)) {				
 				drawable = CATEGORIES.get(category);
-			}else {
-				Log.i("Category", key+" =! "+category);
 			}
 		}
 		return drawable;
