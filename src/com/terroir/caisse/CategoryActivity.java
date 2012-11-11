@@ -20,8 +20,7 @@ public class CategoryActivity extends Activity {
 	
 	public static final String[] __CATEGORIES__ = new String[] {
 		"MIEL ET CONFITURE", "PRODUITS LAITIERS – FROMAGE", "OLIVES – HUILES D'OLIVES", "BOULANGERIE – PATISSERIE", "FRUITS ET LEGUMES", 
-		"VIANDE", "AROME ET PARFUMS", "GOURMANDISES", "VOLAILLES", "PLANTES ET EPICES", "SEL", "SPIRITUEUX", "JUS DE FRUIT ET AUTRES BOISSONS"};
-		
+		"VIANDE", "AROME ET PARFUMS", "GOURMANDISES", "VOLAILLES", "PLANTES ET EPICES", "SEL", "SPIRITUEUX", "JUS DE FRUIT ET AUTRES BOISSONS"};		
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

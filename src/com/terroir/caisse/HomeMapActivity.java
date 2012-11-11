@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.DrawFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -24,6 +25,7 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.terroir.caisse.data.Category;
 import com.terroir.caisse.data.Producer;
 
 public class HomeMapActivity extends MapActivity implements LocationListener {
@@ -69,15 +71,18 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
     	for(int i=0; i<producers.size() && i<30; i++) {
     		Producer p = producers.get(i);
     		GeoPoint point = new GeoPoint(microdegrees(p.latitude), microdegrees(p.longitude));
-        	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(R.drawable.marker));
+    		int drawable = Category.pin(p.sous_type);
+    		if(drawable == -1)
+    			drawable = R.drawable.marker;
+        	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(drawable));
     		pinOverlay.addPoint(point);
     		maMap.getOverlays().add(pinOverlay);
     	}
     }
     
-    protected GeoPoint marker(Location location) {
+    protected GeoPoint marker(Location location, int drawable) {
     	GeoPoint point = new GeoPoint(microdegrees(location.getLatitude()),microdegrees(location.getLongitude()));
-    	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(R.drawable.marker));
+    	ItemizedOverlayPerso pinOverlay = new ItemizedOverlayPerso(getResources().getDrawable(drawable));
 		pinOverlay.addPoint(point);
 		maMap.getOverlays().add(pinOverlay);
 		return point;
@@ -88,7 +93,7 @@ public class HomeMapActivity extends MapActivity implements LocationListener {
     		monLocation = location;
 			Log.i(TAG, "Nouvelle position : " + location.getLatitude() + ", " + location.getLongitude());			
 			monControler.animateTo(new GeoPoint(microdegrees(location.getLatitude()),microdegrees(location.getLongitude())));			
-			monControler.setCenter(marker(location));
+			monControler.setCenter(marker(location, R.drawable.marker));
 		}
     }
     

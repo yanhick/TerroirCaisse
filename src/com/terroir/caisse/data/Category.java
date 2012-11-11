@@ -38,4 +38,35 @@ public class Category {
 		}
 		return drawable;
 	}
+	
+
+	public static final Map<String, Integer> PINS = new HashMap<String, Integer>();
+	static {
+		PINS.put("MIEL", R.drawable.bonbonpin);
+		PINS.put("LAIT", R.drawable.laitpin); 
+		PINS.put("OLIVE", R.drawable.huileolivepin); 
+		PINS.put("BOULANGERIE", R.drawable.boulangerpin); 
+		PINS.put("FRUIT", R.drawable.fruitetlegumepin); 
+		PINS.put("VIANDE", R.drawable.viandepin); 
+		PINS.put("AROME", R.drawable.parfumpin); 
+		PINS.put("GOURMANDISE", R.drawable.bonbonpin); 
+		PINS.put("VOLAILLE", R.drawable.poussinpin); 
+		PINS.put("PLANTE", R.drawable.vegepin); 
+		PINS.put("SEL", R.drawable.selpin); 
+		PINS.put("SPIRITUEUX", R.drawable.bonbonpin); 
+		PINS.put("JUS", R.drawable.jusdefruitpin);
+	}
+	
+	public static Set<String> pin() {
+		return PINS.keySet();
+	}
+	public static int pin(String key) {
+		int drawable = -1;
+		if(key != null)
+			for(String category: Category.pin()) {
+				if(key.toUpperCase().contains(category))
+					drawable = PINS.get(category);
+			}
+		return drawable;
+	}
 }
