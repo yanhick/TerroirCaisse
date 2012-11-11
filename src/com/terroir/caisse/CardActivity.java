@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,13 +17,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.gallery_test2.ImageAdapter;
-import com.example.gallery_test2.ImageData;
-import com.terroir.caisse.data.Producer;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,12 +35,11 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ImageButton;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.widget.Toast;
+
+import com.example.gallery_test2.ImageAdapter;
+import com.example.gallery_test2.ImageData;
+import com.terroir.caisse.data.Producer;
 
 public class CardActivity extends Activity {
 	
@@ -137,14 +133,7 @@ public class CardActivity extends Activity {
 					
 			producer.latitude = Double.parseDouble(intent.getStringExtra("latitude"));
 			producer.longitude = Double.parseDouble(intent.getStringExtra("longitude"));
-			ImageView bookmarkButton = (ImageView) findViewById(R.id.bookmarkButton);
-			bookmarkButton.setOnClickListener(new OnClickListener() {						
-				@Override				
-				public void onClick(View v) {				
-					FavorisActivity.add(producer);					
-					Log.i(TAG, "Bookmarking this producer: "+producer);
-				}				
-			});
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -166,7 +155,14 @@ public class CardActivity extends Activity {
             }
           });
                   
-        
+        ImageView bookmarkButton = (ImageView) findViewById(R.id.bookmarkButton);
+		bookmarkButton.setOnClickListener(new OnClickListener() {						
+			@Override				
+			public void onClick(View v) {				
+				FavorisActivity.add(producer);					
+				Toast.makeText(CardActivity.this,"Bookmarking this producer: "+producer, Toast.LENGTH_LONG).show();
+			}				
+		});
 	}
 	
 	private String getHashTag(){
