@@ -80,31 +80,7 @@ public class CardActivity extends Activity {
 			TextView mailText = (TextView) findViewById(R.id.txtViewMail);
 			mailText.setText(mail);
 			
-			String category = intent.getStringExtra("category");
 			
-			if (category == null)
-			{
-				category = "category";
-			}
-			
-			TextView categoryText = (TextView) findViewById(R.id.txtViewCategory);
-			categoryText.setText(category);
-
-			ImageView imgCategory = (ImageView) findViewById(R.id.imgCategory);
-			imgCategory.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					Intent categoryIntent = new Intent(CardActivity.this, HomeActivity.class);	
-					
-					Intent intent = getIntent();
-					String category = intent.getStringExtra("category");
-					
-					categoryIntent.putExtra("sous-type", category);
-				    startActivity(categoryIntent);
-					
-				}
-			});
 			
 			String website = intent.getStringExtra("website");
 			
@@ -165,9 +141,9 @@ public class CardActivity extends Activity {
           }
         });
         
-        ImageView tweetButton = (ImageView) findViewById(R.id.tweetButton);
+        Button tweetButton = (Button) findViewById(R.id.tweetButton);
         
-        sharingButton.setOnClickListener(new View.OnClickListener() {
+        tweetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
               tweetIt();
             }
