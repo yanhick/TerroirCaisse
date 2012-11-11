@@ -107,9 +107,11 @@ public class CardActivity extends Activity {
 
 					Intent intent = getIntent();
 					String phone = intent.getStringExtra("telephone");
-					
-				    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(phone));			
-				    CardActivity.this.startActivity(callIntent);
+					if (phone != null){
+						 Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phone));			
+						    CardActivity.this.startActivity(callIntent);
+					}
+				   
 				}
 			});	
 			
@@ -156,7 +158,6 @@ public class CardActivity extends Activity {
 		else {
 			escapedName = name.replace(" ", "_");
 		}
-		escapedName = "#"+escapedName;
 		return escapedName;
 	}
 	
@@ -247,7 +248,7 @@ public class CardActivity extends Activity {
         sharingIntent.setType("text/plain");
         
         
-        String shareBody = getHashTag();
+        String shareBody = "#" + getHashTag();
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
