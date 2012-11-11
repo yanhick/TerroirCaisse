@@ -31,9 +31,10 @@ public class FavorisActivity extends Activity {
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        TextView textview = new TextView(this);
-        textview.setText("This is Apple tab");
+        setContentView(R.layout.activity_home);
+        
+        //TextView textview = new TextView(this);
+        //textview.setText("This is Apple tab");
         
         context = this;
         list = (ListView) FavorisActivity.this.findViewById(R.id.lstProducers);
