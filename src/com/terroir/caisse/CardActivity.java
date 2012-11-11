@@ -60,11 +60,11 @@ public class CardActivity extends Activity {
 			
 		try {
 			Intent intent = getIntent();
-			String name = intent.getStringExtra("name");
+			String name = intent.getStringExtra("raison_social");
 			
 			if (name == null)
 			{
-				name = "name";
+				name = "raison_social";
 			}
 			
 			TextView text = (TextView) findViewById(R.id.txtViewName);
@@ -72,36 +72,21 @@ public class CardActivity extends Activity {
 			
 			String mail = intent.getStringExtra("mail");
 			
-			if (mail == null)
-			{
-				mail = "mail@mail.com";
-			}
-			
 			TextView mailText = (TextView) findViewById(R.id.txtViewMail);
 			mailText.setText(mail);
 			
 			
 			
-			String website = intent.getStringExtra("website");
-			
-			if (website == null)
-			{
-				website = "http://www.google.fr";
-			}
+			String website = intent.getStringExtra("addresse_web");
 			
 			TextView websiteText = (TextView) findViewById(R.id.txtViewWebSite);
 			websiteText.setText(website);
 			
 			
 			
-			String phone = intent.getStringExtra("phone");
+			String phone = intent.getStringExtra("telephone");
 			
 
-			if (phone == null)
-			{
-				phone = "0606060606";
-			}
-			
 			TextView phoneText = (TextView) findViewById(R.id.txtPhone);
 			phoneText.setText(phone);
 			
@@ -116,7 +101,7 @@ public class CardActivity extends Activity {
 					
 
 					Intent intent = getIntent();
-					String phone = intent.getStringExtra("phone");
+					String phone = intent.getStringExtra("telephone");
 					
 				    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(phone));			
 				    CardActivity.this.startActivity(callIntent);
@@ -157,7 +142,7 @@ public class CardActivity extends Activity {
 		
 		Intent intent = getIntent();
 		
-		String name = intent.getStringExtra("name");
+		String name = intent.getStringExtra("raison_social");
 		
 		String escapedName = "";
 		if (name == null) {

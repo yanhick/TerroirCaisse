@@ -12,20 +12,7 @@ public class FullImageDisplay extends Activity {
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.full_image_display);
-	        ImageView imageView = (ImageView) findViewById(R.id.image);
 	        
-	        Intent intent = getIntent();
-	        String url = intent.getStringExtra(ImageAdapter.IMAGE_URL_EXTRA);
-	        new LoadImage().execute(new ImageLoadingData(url, imageView));
-
-	    
-	       imageView.setOnClickListener(new OnClickListener() {
-               @Override
-               public void onClick(View v) {
-            	   finish();
-               }
-	      });
 	    }
 
 }
